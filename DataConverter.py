@@ -274,6 +274,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         """
         out = u''
+
         for key, typ in zip(self.headers, self.types):
             if row[key] is None:
                 txt = nulltxt
@@ -305,14 +306,12 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         self.syntax = 'Packages/ASP/ASP.tmLanguage'
         #comment, comment_end = "'", ""
         output, r = u"", 0
-        zipper = zip(range(len(self.headers)), self.headers, self.types)
         #print(self.headers, self.types)
 
         #begin render loop
         for row in datagrid:
 
-            for c, key, item_type in zipper:
-
+            for c, key, item_type in zip(range(len(self.headers)), self.headers, self.types):
                 if item_type == str:
                     row[key] = '"' + (row[key] or "") + '"'
                 if item_type is None:
@@ -366,7 +365,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
     def javascript(self, datagrid):
         """JavaScript object converter"""
         self.syntax = 'Packages/JavaScript/JavaScript.tmLanguage'
-        output = u'var dataConverter = [' + self.newline
+        output = u'[' + self.newline
 
         #begin render loop
         for row in datagrid:
@@ -403,7 +402,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         for row in datagrid:
             itemlist = []
-            for item in row.itervalues():
+            for item in row.values():
                 itemlist.append(item)
             rowArrays.append(itemlist)
 
@@ -471,7 +470,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         """PHP converter"""
         self.syntax = 'Packages/PHP/PHP.tmLanguage'
         #comment, comment_end = "//", ""
-        output = u"$DataConverter = array(" + self.newline
+        output = u"array(" + self.newline
 
         #begin render loop
         for row in datagrid:
@@ -546,13 +545,12 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         output_text += u"</rows>"
 
-        return output_text.format(i=self.indent, n=self.newline).encode('ascii', 'xmlcharrefreplace')
+        return output_text.format(i=self.indent, n=self.newline).encode('ascii', 'xmlcharrefreplace').decode('ascii', 'xmlcharrefreplace')
 
     def xmlProperties(self, datagrid):
         """XML properties converter"""
         self.syntax = 'Packages/XML/XML.tmLanguage'
         output_text = u'<?xml version="1.0" encoding="UTF-8"?>{n}<rows>{n}'
-
         #begin render loop
         for row in datagrid:
             row_list = []
@@ -565,8 +563,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
             output_text += u"{i}<row " + row_text + "></row>{n}"
 
         output_text += u"</rows>"
-
-        return output_text.format(i=self.indent, n=self.newline).encode('ascii', 'xmlcharrefreplace')
+        return output_text.format(i=self.indent, n=self.newline).encode('ascii', 'xmlcharrefreplace').decode('ascii', 'xmlcharrefreplace')
 
     def text_table(self, datagrid):
         """text table converter"""
