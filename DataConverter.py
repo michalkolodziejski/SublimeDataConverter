@@ -33,7 +33,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         try:
             self.get_settings(kwargs)
         except Exception as e:
-            print "DataConverter: error fetching settings. Did you specify a format?", e
+            print("DataConverter: error fetching settings. Did you specify a format?", e)
             return
 
         if self.view.sel()[0].empty():
@@ -121,7 +121,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
                 self.dialect = csv.get_dialect(dialectname)
             except Exception:
                 user_dialects = self.settings.get('dialects')
-                print "couldn't find ", dialectname
+                print("couldn't find ", dialectname)
 
                 try:
                     try:
@@ -137,7 +137,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
                     self.dialect = csv.get_dialect(dialectname)
                 except Exception:
                     self.dialect = None
-                    print 'DataConverter could not find', dialectname, ". Will try to sniff for a dialect"
+                    print('DataConverter could not find', dialectname, ". Will try to sniff for a dialect")
         else:
             self.dialect = None
 
@@ -147,10 +147,10 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         try:
             dialect = csv.Sniffer().sniff(sample)
-            print 'DataConverter is using this delimiter:', dialect.delimiter
+            print('DataConverter is using this delimiter:', dialect.delimiter)
             return dialect
         except Exception as e:
-            print "DataConverter had trouble sniffing:", e
+            print("DataConverter had trouble sniffing:", e)
             delimiter = self.settings.get('delimiter', ',')
             delimiter = bytes(delimiter)  # dialect definition takes a 1-char bytestring
             try:
@@ -243,7 +243,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
             else:
                 output_types.append(int)
 
-        print 'DataConverter found these output types:', output_types
+        print('DataConverter found these output types:', output_types)
         return output_types
 
     def get_type(self, datum):
@@ -303,7 +303,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         #comment, comment_end = "'", ""
         output, r = u"", 0
         zipper = zip(range(len(self.headers)), self.headers, self.types)
-        #print self.headers, self.types
+        #print(self.headers, self.types)
 
         #begin render loop
         for row in datagrid:
