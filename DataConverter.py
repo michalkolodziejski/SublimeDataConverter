@@ -10,7 +10,7 @@ import sublime
 import sublime_plugin
 import csv
 import os
-import StringIO
+from io import StringIO
 
 PACKAGES = sublime.packages_path()
 
@@ -24,7 +24,8 @@ def UnicodeDictReader(data, encoding='utf-8', **kwargs):
     keymap = dict((k, k) for k in csv_reader.fieldnames)
 
     for row in csv_reader:
-        yield dict((keymap[k], v.decode(encoding)) for k, v in row.iteritems())
+        # yield dict((keymap[k], v.decode(encoding)) for k, v in row.items())
+        yield dict((keymap[k], v) for k, v in row.items())
 
 
 class DataConverterCommand(sublime_plugin.TextCommand):
@@ -188,8 +189,8 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         if self.settings.get('has_header', False) is True:
             selection = selection[selection.find(self.newline):]
 
-        selection = selection.encode('utf-8')
-        csvIO = StringIO.StringIO(selection)
+        # selection = selection.encode('utf-8')
+        csvIO = StringIO(selection)
 
         reader = UnicodeDictReader(
             csvIO,
@@ -199,7 +200,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         if self.settings.get('typed', False) is True:
             # Another reader for checking field types.
-            typerIO = StringIO.StringIO(selection)
+            typerIO = StringIO(selection)
             typer = csv.DictReader(typerIO, fieldnames=self.headers, dialect=self.dialect)
             self.types = self.parse(typer, self.headers)
 
@@ -386,7 +387,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
         colDict = {}
 
         for row in datagrid:
-            for key, item in row.iteritems():
+            for key, item in row.items():
                 if key not in colDict:
                     colDict[key] = []
                 colDict[key].append(item)
