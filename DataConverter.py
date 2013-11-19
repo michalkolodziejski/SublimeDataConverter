@@ -221,8 +221,9 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
         for n in range(10):
             try:
-                row = reader.next()
+                row = next(reader)
             except:
+                print('Error parsing')
                 break
 
             tmp = []
@@ -286,11 +287,12 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def actionscript(self, datagrid):
         """Actionscript converter"""
-        self.syntax = PACKAGES + '/ActionScript/ActionScript.tmLanguage'
+        self.syntax = 'Packages/ActionScript/ActionScript.tmLanguage'
         output = u"["
 
         #begin render loops
         for row in datagrid:
+            print ('begin row', row)
             output += "{"
             output += self.type_loop(row, u'{0}:{1},')
 
@@ -300,7 +302,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     # ASP / VBScript
     def asp(self, datagrid):
-        self.syntax = PACKAGES + '/ASP/ASP.tmLanguage'
+        self.syntax = 'Packages/ASP/ASP.tmLanguage'
         #comment, comment_end = "'", ""
         output, r = u"", 0
         zipper = zip(range(len(self.headers)), self.headers, self.types)
@@ -329,7 +331,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def html(self, datagrid):
         """HTML Table converter"""
-        self.syntax = PACKAGES + '/HTML/HTML.tmLanguage'
+        self.syntax = 'Packages/HTML/HTML.tmLanguage'
         thead, tbody = u"", u""
 
         # Render the table head, if there is one
@@ -363,7 +365,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def javascript(self, datagrid):
         """JavaScript object converter"""
-        self.syntax = PACKAGES + '/JavaScript/JavaScript.tmLanguage'
+        self.syntax = 'Packages/JavaScript/JavaScript.tmLanguage'
         output = u'var dataConverter = [' + self.newline
 
         #begin render loop
@@ -376,14 +378,14 @@ class DataConverterCommand(sublime_plugin.TextCommand):
     def json(self, datagrid):
         """JSON properties converter"""
         import json
-        self.syntax = PACKAGES + '/JavaScript/JavaScript.tmLanguage'
+        self.syntax = 'Packages/JavaScript/JavaScript.tmLanguage'
 
         return json.dumps([row for row in datagrid])
 
     def jsonArrayCols(self, datagrid):
         """JSON Array of Columns converter"""
         import json
-        self.syntax = PACKAGES + '/JavaScript/JavaScript.tmLanguage'
+        self.syntax = 'Packages/JavaScript/JavaScript.tmLanguage'
         colDict = {}
 
         for row in datagrid:
@@ -396,7 +398,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
     def jsonArrayRows(self, datagrid):
         """JSON Array of Rows converter"""
         import json
-        self.syntax = PACKAGES + '/JavaScript/JavaScript.tmLanguage'
+        self.syntax = 'Packages/JavaScript/JavaScript.tmLanguage'
         rowArrays = []
 
         for row in datagrid:
@@ -409,7 +411,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def mysql(self, datagrid):
         """MySQL converter"""
-        self.syntax = PACKAGES + '/SQL/SQL.tmLanguage'
+        self.syntax = 'Packages/SQL/SQL.tmLanguage'
 
         table = u'DataConverter'
 
@@ -453,7 +455,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def perl(self, datagrid):
         """Perl converter"""
-        self.syntax = PACKAGES + '/Perl/Perl.tmLanguage'
+        self.syntax = 'Packages/Perl/Perl.tmLanguage'
         output = u"["
 
         #begin render loop
@@ -467,7 +469,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def php(self, datagrid):
         """PHP converter"""
-        self.syntax = PACKAGES + '/PHP/PHP.tmLanguage'
+        self.syntax = 'Packages/PHP/PHP.tmLanguage'
         #comment, comment_end = "//", ""
         output = u"$DataConverter = array(" + self.newline
 
@@ -482,7 +484,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def python_dict(self, datagrid):
         """Python dict converter"""
-        self.syntax = PACKAGES + '/Python/Python.tmLanguage'
+        self.syntax = 'Packages/Python/Python.tmLanguage'
         fields = []
         for row in datagrid:
             outrow = {}
@@ -499,7 +501,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def python_list(self, datagrid):
         """Python list of lists converter"""
-        self.syntax = PACKAGES + '/Python/Python.tmLanguage'
+        self.syntax = 'Packages/Python/Python.tmLanguage'
         fields = []
         for row in datagrid:
             outrow = []
@@ -515,7 +517,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def ruby(self, datagrid):
         """Ruby converter"""
-        self.syntax = PACKAGES + '/Ruby/Ruby.tmLanguage'
+        self.syntax = 'Packages/Ruby/Ruby.tmLanguage'
         #comment, comment_end = "#", ""
         output = u"["
 
@@ -530,7 +532,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def xml(self, datagrid):
         """XML Nodes converter"""
-        self.syntax = PACKAGES + '/XML/XML.tmLanguage'
+        self.syntax = 'Packages/XML/XML.tmLanguage'
         output_text = u'<?xml version="1.0" encoding="UTF-8"?>{n}<rows>{n}'
 
         #begin render loop
@@ -548,7 +550,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def xmlProperties(self, datagrid):
         """XML properties converter"""
-        self.syntax = PACKAGES + '/XML/XML.tmLanguage'
+        self.syntax = 'Packages/XML/XML.tmLanguage'
         output_text = u'<?xml version="1.0" encoding="UTF-8"?>{n}<rows>{n}'
 
         #begin render loop
@@ -568,7 +570,7 @@ class DataConverterCommand(sublime_plugin.TextCommand):
 
     def text_table(self, datagrid):
         """text table converter"""
-        self.syntax = PACKAGES + '/Text/Plain text.tmLanguage'
+        self.syntax = 'Packages/Text/Plain text.tmLanguage'
         output_text, divline, field_length, _datagrid = u'|', u'+', {}, []
 
         _datagrid = [row for row in datagrid]
